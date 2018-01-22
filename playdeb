@@ -1,0 +1,40 @@
+#! /usr/bin/env sh
+
+#set -e
+
+export container_tag="eyedeekay/playdeb"
+
+export sub_tag="$1"
+
+export container="docker run --name $1 -t eyedeekay/playdeb"
+
+export sub_container="FROM eyedeekay/playdeb
+RUN apt-get update && apt-get install -y \"$1\"
+USER playdeb
+RUN ls /usr/games
+CMD [ "$1" ]
+"
+
+export DISPLAY=":0"
+
+add(){
+    echo "$sub_container" | docker build -t "$sub_tag" -
+}
+
+launch(){
+    echo "docker run -it -e DISPLAY=\"$DISPLAY\" \
+		--device /dev/snd \
+		-v /tmp/.X11-unix:/tmp/.X11-unix \
+		-v \"$HOME\"/.Xauthority:/home/playdeb/.Xauthority \
+        --name \"$sub_tag\" \
+        \"$sub_tag\" /usr/games/$sub_tag"
+    docker run -it -e DISPLAY="$DISPLAY" \
+		--device /dev/snd \
+		-v /tmp/.X11-unix:/tmp/.X11-unix \
+		-v "$HOME"/.Xauthority:/home/playdeb/.Xauthority \
+        --name "$sub_tag" \
+        "$sub_tag" "ls /usr/"
+}
+
+add
+launch
