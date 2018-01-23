@@ -8,8 +8,7 @@ RUN apt-get install -y libsdl2-dev libsdl2-gfx-dev libsdl2-image-dev \
     libsdl2-image-2.0-0 libsdl2-mixer-2.0-0 libsdl2-net-2.0-0 \
     libsdl2-ttf-2.0-0 libsdl-ttf2.0-0 libsdl-ttf2.0-dev libluajit-5.1-2 \
     libluajit-5.1-common libluajit-5.1-dev liblua5.2-dev luajit lua5.2 \
-    lua-check libc-dev make git musl musl-dev musl-tools debhelper devscripts \
-    xdg-user-dirs fakeroot-ng xdg-utils git-core git liblz4-tool vrms
+    lua-check libc-dev musl musl-dev musl-tools xdg-user-dirs fakeroot-ng xdg-utils liblz4-tool
 RUN apt-get -y dist-upgrade
 RUN adduser --home /home/playdeb --disabled-password --gecos 'playdeb,,,,' playdeb
 ENTRYPOINT [ "sh", "-i", "-c" ]

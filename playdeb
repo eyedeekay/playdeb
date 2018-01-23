@@ -59,10 +59,11 @@ export sub_tag="$PACKAGE"
 export container="docker run --name $PACKAGE -t eyedeekay/playdeb"
 
 export sub_container="FROM eyedeekay/playdeb
-RUN apt-get update && apt-get install -y \"$PACKAGE\"
+RUN apt-get update && apt-get install -y \"$PACKAGE\" vrms
 RUN apt-get dist-upgrade -y
 USER playdeb
 RUN ls /usr/games
+RUN vrms
 CMD [ \"$BINARY\" ]
 "
 
@@ -96,7 +97,7 @@ show(){
 }
 
 check(){
-    docker run --rm -it --entrypoint vrms "$sub_tag"
+    docker run --rm -it "$sub_tag" vrms
 }
 
 if [ "$ACTION" == 'search' ]; then
