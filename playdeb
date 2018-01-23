@@ -59,11 +59,11 @@ export sub_tag="$PACKAGE"
 export container="docker run --name $PACKAGE -t eyedeekay/playdeb"
 
 export sub_container="FROM eyedeekay/playdeb
-RUN apt-get update && apt-get install -y \"$PACKAGE\" vrms
+RUN apt-get update && apt-get install -y \"$PACKAGE\" vrms &> /dev/null
 RUN apt-get dist-upgrade -y
+RUN vrms && apt-get purge -qy vrms
 USER playdeb
 RUN ls /usr/games
-RUN vrms
 CMD [ \"sh\", \"-i\", \"-c\" ]
 "
 
@@ -80,7 +80,7 @@ launch(){
 		-v "$HOME"/.Xauthority:/homse/playdeb/.Xauthority \
         -v $HOME/.local/playdeb:/home/playdeb \
         --name "$sub_tag" \
-        "$sub_tag" "/usr/games/$sub_tag"
+        "playdeb/$sub_tag" "/usr/games/$sub_tag"
 }
 
 remove(){
