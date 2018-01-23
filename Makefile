@@ -25,7 +25,7 @@ build: .build
 
 .build:
 	docker build -f Dockerfile -t eyedeekay/playdeb .
-	docker run --name playdeb eyedeekay/playdeb false; \
+	docker run --name playdeb -v playdeb-volume:/home/playdeb eyedeekay/playdeb false; \
 	touch .build
 
 

@@ -23,7 +23,7 @@ to work inside it.
    to have to keep track of the source every time I want to update. I want to
    use versions which are most widely used by the larger community. I like the
    ability to search within the packages available to Playdeb users and not
-   needing to track down each game I might want to try's source reporitory.
+   needing to track down each game I might want to try's source repository.
 
 ## usage
 
