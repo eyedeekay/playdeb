@@ -70,7 +70,7 @@ CMD [ \"sh\", \"-i\", \"-c\" ]
 export DISPLAY=":0"
 
 add(){
-    echo "$sub_container" | docker build --force-rm -t "$sub_tag" -
+    echo "$sub_container" | docker build --force-rm -t "playdeb/$sub_tag" -
 }
 
 launch(){
@@ -85,7 +85,7 @@ launch(){
 
 remove(){
     docker rm -f "$sub_tag"
-    docker rmi -f "$sub_tag"
+    docker rmi -f "playdeb/$sub_tag"
 }
 
 search(){
@@ -98,7 +98,7 @@ show(){
 }
 
 check(){
-    docker run --rm -it "$sub_tag" vrms
+    docker run --rm -it "playdeb/$sub_tag" vrms
 }
 
 if [ "$ACTION" == 'search' ]; then
