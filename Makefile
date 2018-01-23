@@ -35,7 +35,7 @@ install: build
 clobber:
 	docker rm -f playdeb; \
 	docker rmi -f eyedeekay/playdeb; \
-	rm -rf .build
+	rm .build
 
 remove: clobber
 
