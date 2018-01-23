@@ -78,7 +78,7 @@ launch(){
 		--device /dev/snd \
 		-v /tmp/.X11-unix:/tmp/.X11-unix \
 		-v "$HOME"/.Xauthority:/homse/playdeb/.Xauthority \
-        -v $HOME/.local/playdeb:/home/playdeb \
+        --volumes-from $container_tag \
         --name "$sub_tag" \
         "playdeb/$sub_tag" "/usr/games/$sub_tag"
 }
