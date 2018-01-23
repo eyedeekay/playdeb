@@ -34,6 +34,12 @@ case $key in
     shift # past argument
     shift # past value
     ;;
+    v|vrms)
+    ACTION="vrms"
+    PACKAGE="$2"
+    shift # past argument
+    shift # past value
+    ;;
     p|packages)
     ACTION="show"
     shift # past argument
@@ -89,6 +95,11 @@ show(){
     "lz4cat /var/lib/apt/lists/archive.getdeb*Packages* | less"
 }
 
+check(){
+    docker run --rm -it "$sub_tag" \
+        --entrypoint vrms
+}
+
 if [ "$ACTION" == 'search' ]; then
     search
 elif [ "$ACTION" == 'add' ]; then
@@ -99,6 +110,8 @@ elif [ "$ACTION" == 'launch' ]; then
     launch
 elif [ "$ACTION" == 'show' ]; then
     show
+elif [ "$ACTION" == 'vrms' ]; then
+    check
 else
     echo ' PlayDeb Game Installer Container:
 ==================================

@@ -24,5 +24,8 @@ Passing no arguments or an invalid argument will display this help message.
 
 ## examples
 
-        playdeb
+        playdeb add freeciv #install freeciv
+
+        playdeb launch freeciv #start playing freeciv
+
 
