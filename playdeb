@@ -96,8 +96,7 @@ show(){
 }
 
 check(){
-    docker run --rm -it "$sub_tag" \
-        --entrypoint vrms
+    docker run --rm -it --entrypoint vrms "$sub_tag"
 }
 
 if [ "$ACTION" == 'search' ]; then
