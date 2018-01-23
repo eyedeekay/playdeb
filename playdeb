@@ -74,7 +74,7 @@ add(){
 }
 
 launch(){
-    docker run -it -e DISPLAY="unix$DISPLAY" \
+    docker run --rm -it -e DISPLAY="unix$DISPLAY" \
 		--device /dev/snd \
 		-v /tmp/.X11-unix:/tmp/.X11-unix \
 		-v "$HOME"/.Xauthority:/homse/playdeb/.Xauthority \
