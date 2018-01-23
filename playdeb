@@ -78,6 +78,7 @@ launch(){
 		--device /dev/snd \
 		-v /tmp/.X11-unix:/tmp/.X11-unix \
 		-v "$HOME"/.Xauthority:/homse/playdeb/.Xauthority \
+        -v $HOME/.local/playdeb:/home/playdeb \
         --name "$sub_tag" \
         "$sub_tag" "/usr/games/$sub_tag"
 }
@@ -107,6 +108,7 @@ elif [ "$ACTION" == 'add' ]; then
 elif [ "$ACTION" == 'remove' ]; then
     remove
 elif [ "$ACTION" == 'launch' ]; then
+    add
     launch
 elif [ "$ACTION" == 'show' ]; then
     show
