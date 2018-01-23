@@ -32,6 +32,11 @@ case $key in
     ACTION="search"
     QUERY="$2"
     shift # past argument
+    shift # past value
+    ;;
+    p|packages)
+    ACTION="show"
+    shift # past argument
     ;;
     *)    # unknown option
     POSITIONAL+=("$1") # save it in an array for later
@@ -52,7 +57,7 @@ RUN apt-get update && apt-get install -y \"$PACKAGE\"
 RUN apt-get dist-upgrade -y
 USER playdeb
 RUN ls /usr/games
-CMD [ "$BINARY" ]
+CMD [ \"$BINARY\" ]
 "
 
 export DISPLAY=":0"
@@ -62,12 +67,6 @@ add(){
 }
 
 launch(){
-    echo "docker run -it -e DISPLAY=\"$DISPLAY\" \
-		--device /dev/snd \
-		-v /tmp/.X11-unix:/tmp/.X11-unix \
-		-v \"$HOME\"/.Xauthority:/home/playdeb/.Xauthority \
-        --name \"$sub_tag\" \
-        \"$sub_tag\" /usr/games/$sub_tag"
     docker run -it -e DISPLAY="unix$DISPLAY" \
 		--device /dev/snd \
 		-v /tmp/.X11-unix:/tmp/.X11-unix \
@@ -85,6 +84,11 @@ search(){
     docker run --rm -t "$container_tag" "apt-cache search $QUERY"
 }
 
+show(){
+    docker run --rm -it "$container_tag" \
+    "lz4cat /var/lib/apt/lists/archive.getdeb*Packages* | less"
+}
+
 if [ "$ACTION" == 'search' ]; then
     search
 elif [ "$ACTION" == 'add' ]; then
@@ -93,9 +97,11 @@ elif [ "$ACTION" == 'remove' ]; then
     remove
 elif [ "$ACTION" == 'launch' ]; then
     launch
+elif [ "$ACTION" == 'show' ]; then
+    show
 else
     echo ' PlayDeb Game Installer Container:
-======================
+==================================
 This helps you install games from PlayDeb without accidentally creating
 a FrankenDebian. To use it, run the command:
 
@@ -107,6 +113,7 @@ with one of the following arguments:
     remove $package: Remove a container with a PlayDeb-installed package
     search $package: Search for a package to install
     launch $package: Launch a package from inside a container
+    packages: list all packages.
     '
 fi
 

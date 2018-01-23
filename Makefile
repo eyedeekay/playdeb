@@ -1,6 +1,9 @@
 
-build:
+build: .build
+
+.build:
 	docker build -f Dockerfile -t eyedeekay/playdeb .
+	touch .build
 
 install: build
 	install -m755 playdeb /usr/local/bin
@@ -12,3 +15,4 @@ clobber:
 remove: clobber
 
 uninstall: clobber
+
