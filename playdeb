@@ -1,19 +1,58 @@
-#! /usr/bin/env sh
+#! /usr/bin/env bash
 
 #set -e
 
+ACTION="help"
+
+POSITIONAL=()
+while [[ $# -gt 0 ]]
+do
+key="$1"
+
+case $key in
+    a|add)
+    ACTION="add"
+    PACKAGE="$2"
+    shift # past argument
+    shift # past value
+    ;;
+    r|remove)
+    ACTION="remove"
+    PACKAGE="$2"
+    shift # past argument
+    shift # past value
+    ;;
+    l|launch)
+    ACTION="launch"
+    BINARY="$2"
+    shift # past argument
+    shift # past value
+    ;;
+    s|search)
+    ACTION="search"
+    QUERY="$2"
+    shift # past argument
+    ;;
+    *)    # unknown option
+    POSITIONAL+=("$1") # save it in an array for later
+    shift # past argument
+    ;;
+esac
+done
+set -- "${POSITIONAL[@]}"
+
 export container_tag="eyedeekay/playdeb"
 
-export sub_tag="$1"
+export sub_tag="$PACKAGE"
 
-export container="docker run --name $1 -t eyedeekay/playdeb"
+export container="docker run --name $PACKAGE -t eyedeekay/playdeb"
 
 export sub_container="FROM eyedeekay/playdeb
-RUN apt-get update && apt-get install -y \"$1\"
+RUN apt-get update && apt-get install -y \"$PACKAGE\"
 RUN apt-get dist-upgrade -y
 USER playdeb
 RUN ls /usr/games
-CMD [ "$1" ]
+CMD [ "$BINARY" ]
 "
 
 export DISPLAY=":0"
@@ -37,5 +76,36 @@ launch(){
         "$sub_tag" "/usr/games/$sub_tag"
 }
 
-add
-launch
+remove(){
+    docker rm -f "$sub_tag"
+}
+
+search(){
+    docker run --rm -t "$container_tag" "apt-cache search $QUERY"
+}
+
+if [ "$ACTION" == 'search' ]; then
+    search
+elif [ "$ACTION" == 'add' ]; then
+    add
+elif [ "$ACTION" == 'remove' ]; then
+    remove
+elif [ "$ACTION" == 'launch' ]; then
+    launch
+else
+    echo ' PlayDeb Game Installer Container:
+======================
+This helps you install games from PlayDeb without accidentally creating
+a FrankenDebian. To use it, run the command:
+
+    playdeb
+
+with one of the following arguments:
+
+    add $package: Install a package in a container based on the PlayDeb-enabled container
+    remove $package: Remove a container with a PlayDeb-installed package
+    search $package: Search for a package to install
+    launch $package: Launch a package from inside a container
+    '
+fi
+
