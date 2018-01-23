@@ -78,6 +78,7 @@ launch(){
 
 remove(){
     docker rm -f "$sub_tag"
+    docker rmi -f "$sub_tag"
 }
 
 search(){

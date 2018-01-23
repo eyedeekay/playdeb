@@ -8,3 +8,7 @@ install: build
 clobber:
 	docker rm -f eyedeekay/playdeb; \
 	docker rmi -f eyedeekay/playdeb; true
+
+remove: clobber
+
+uninstall: clobber
